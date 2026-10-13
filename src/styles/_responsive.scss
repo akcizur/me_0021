@@ -110,6 +110,8 @@
   .edge,
   .edge::before,
   .edge::after,
+  .edge__shine::before,
+  .edge__shine::after,
   .edge__glow,
   .edge__haze,
   .edge__mist,
@@ -123,4 +125,6 @@
   .hero-scroll-cue { transition: none !important; }
   .hero-scroll-cue__line { transform: none !important; }
   .chapter-atmosphere { opacity: .24 !important; transform: none !important; filter: none !important; }
+  .edge__shine::before,
+  .edge__shine::after { opacity: .015 !important; }
 }
