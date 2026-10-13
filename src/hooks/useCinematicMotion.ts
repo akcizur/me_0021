@@ -46,6 +46,11 @@ export function useCinematicMotion(rootRef: RefObject<HTMLDivElement | null>): v
     const setTopGlowY = topGlow ? gsap.quickSetter(topGlow, 'y', 'px') : null;
     const setBottomGlowX = bottomGlow ? gsap.quickSetter(bottomGlow, 'x', 'px') : null;
     const setBottomGlowY = bottomGlow ? gsap.quickSetter(bottomGlow, 'y', 'px') : null;
+    // Split the edge highlight into independently offset colour channels.
+    const setTopChromaticA = topEdge ? gsap.quickSetter(topEdge, '--chromatic-offset-a', 'px') : null;
+    const setTopChromaticB = topEdge ? gsap.quickSetter(topEdge, '--chromatic-offset-b', 'px') : null;
+    const setBottomChromaticA = bottomEdge ? gsap.quickSetter(bottomEdge, '--chromatic-offset-a', 'px') : null;
+    const setBottomChromaticB = bottomEdge ? gsap.quickSetter(bottomEdge, '--chromatic-offset-b', 'px') : null;
 
     let lastScroll = window.scrollY;
     let pendingDelta = 0;
@@ -73,10 +78,18 @@ export function useCinematicMotion(rootRef: RefObject<HTMLDivElement | null>): v
       topEnergy = lerp(topEnergy, energy * (scrollDelta < 0 ? 1 : 0.16), scrollDelta === 0 ? 0.12 : 0.34);
       bottomEnergy = lerp(bottomEnergy, energy * (scrollDelta > 0 ? 1 : 0.16), scrollDelta === 0 ? 0.12 : 0.34);
 
+      // Velocity raises the RGB split without introducing a second scroll engine.
+      const chromaticOffset = 1 + (reducedMotion.matches ? 0 : edgeEnergy * 6);
+      setTopChromaticA?.(-chromaticOffset);
+      setTopChromaticB?.(chromaticOffset);
+      setBottomChromaticA?.(chromaticOffset);
+      setBottomChromaticB?.(-chromaticOffset);
+
       rootStyle.setProperty('--edge-energy', edgeEnergy.toFixed(3));
       rootStyle.setProperty('--edge-energy-top', topEnergy.toFixed(3));
       rootStyle.setProperty('--edge-energy-bottom', bottomEnergy.toFixed(3));
       rootStyle.setProperty('--scroll-position', scrollRatio.toFixed(5));
+      rootStyle.setProperty('--grain-energy', (reducedMotion.matches ? 0 : edgeEnergy).toFixed(3));
 
       const viewportCenter = scrollY + window.innerHeight * 0.5;
       parallaxIsSettling = false;
@@ -159,7 +172,11 @@ export function useCinematicMotion(rootRef: RefObject<HTMLDivElement | null>): v
       window.removeEventListener('resize', onResize);
       reducedMotion.removeEventListener('change', onMotionPreferenceChange);
       parallaxItems.forEach((item) => item.element.style.removeProperty('transform'));
-      ['--edge-energy', '--edge-energy-top', '--edge-energy-bottom', '--scroll-position'].forEach((property) => rootStyle.removeProperty(property));
+      [topEdge, bottomEdge].forEach((edge) => {
+        edge?.style.removeProperty('--chromatic-offset-a');
+        edge?.style.removeProperty('--chromatic-offset-b');
+      });
+      ['--edge-energy', '--edge-energy-top', '--edge-energy-bottom', '--scroll-position', '--grain-energy'].forEach((property) => rootStyle.removeProperty(property));
     };
   }, [rootRef]);
 }
