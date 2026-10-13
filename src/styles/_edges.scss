@@ -22,9 +22,9 @@
   &::before {
     content: '';
     position: absolute;
-    inset: -54px -5%;
-    background: rgba(5, 5, 5, .012);
-    backdrop-filter: blur(calc(var(--edge-blur-main) + var(--edge-energy) * 46px)) saturate(calc(1.06 + var(--edge-energy) * .14));
+    inset: -76px -7%;
+    background: rgba(5, 5, 5, .035);
+    backdrop-filter: blur(calc(var(--edge-blur-main) + var(--edge-energy) * 58px)) saturate(calc(1.06 + var(--edge-energy) * .14));
     -webkit-backdrop-filter: blur(calc(var(--edge-blur-main) + var(--edge-energy) * 46px)) saturate(calc(1.06 + var(--edge-energy) * .14));
     mask-image: linear-gradient(
       to bottom,
@@ -85,11 +85,11 @@
   &::after {
     content: '';
     position: absolute;
-    inset: -38px -4%;
+    inset: -58px -6%;
     background:
       linear-gradient(90deg, rgba(255, 255, 255, .025), transparent 13%, transparent 87%, rgba(255, 255, 255, .025)),
-      linear-gradient(to bottom, rgba(0, 0, 0, .28), rgba(0, 0, 0, .17) 24%, rgba(0, 0, 0, .075) 49%, rgba(0, 0, 0, .025) 73%, transparent 100%);
-    backdrop-filter: blur(calc(var(--edge-blur-diffusion) + var(--edge-energy) * 24px)) saturate(1.08);
+      linear-gradient(to bottom, rgba(0, 0, 0, .42), rgba(0, 0, 0, .29) 24%, rgba(0, 0, 0, .13) 49%, rgba(0, 0, 0, .045) 73%, transparent 100%);
+    backdrop-filter: blur(calc(var(--edge-blur-diffusion) + var(--edge-energy) * 32px)) saturate(1.08);
     -webkit-backdrop-filter: blur(calc(var(--edge-blur-diffusion) + var(--edge-energy) * 24px)) saturate(1.08);
     mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
@@ -99,7 +99,7 @@
   &--bottom::after {
     background:
       linear-gradient(90deg, rgba(255, 255, 255, .025), transparent 13%, transparent 87%, rgba(255, 255, 255, .025)),
-      linear-gradient(to top, rgba(0, 0, 0, .32), rgba(0, 0, 0, .19) 24%, rgba(0, 0, 0, .085) 49%, rgba(0, 0, 0, .025) 73%, transparent 100%);
+      linear-gradient(to top, rgba(0, 0, 0, .48), rgba(0, 0, 0, .32) 24%, rgba(0, 0, 0, .15) 49%, rgba(0, 0, 0, .05) 73%, transparent 100%);
     mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
     -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
   }
@@ -117,7 +117,7 @@
   &__haze {
     inset: -12% -5%;
     background: linear-gradient(to bottom, rgba(255, 255, 255, .052), rgba(255, 255, 255, .026) 28%, rgba(255, 255, 255, .009) 60%, transparent 100%);
-    filter: blur(54px);
+    filter: blur(70px);
     opacity: calc(.36 + var(--edge-energy) * .14);
   }
 
@@ -130,7 +130,7 @@
     background:
       radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .085) 0%, rgba(255, 255, 255, .038) 24%, rgba(255, 255, 255, .012) 47%, transparent 72%),
       linear-gradient(to bottom, rgba(255, 255, 255, .025), rgba(255, 255, 255, .009) 48%, transparent 100%);
-    filter: blur(38px);
+    filter: blur(50px);
     opacity: calc(.30 + var(--edge-energy) * .16);
     transform: translate3d(0, var(--mist-drift, 0px), 0);
   }
@@ -143,8 +143,8 @@
 
   // Larger luminous bloom, itself masked toward the center of the page.
   &__glow {
-    width: min(84vw, 1180px);
-    height: min(52vw, 680px);
+    width: min(92vw, 1340px);
+    height: min(58vw, 760px);
     border-radius: 50%;
     background: radial-gradient(
       ellipse at center,
@@ -154,7 +154,7 @@
       rgba(255, 255, 255, .012) 61%,
       transparent 78%
     );
-    filter: blur(86px) saturate(1.18);
+    filter: blur(104px) saturate(1.18);
     opacity: calc(.30 + var(--edge-energy) * .34);
   }
 
