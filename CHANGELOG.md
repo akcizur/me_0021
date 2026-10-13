@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.2 — Deeper cinematic edge vignette
+
+- Increased main and secondary blur and extended the diffusion layers.
+- Darkened the upper and lower viewport edges with matching soft shadow layers.
+- Tuned the mobile edge treatment so the stronger vignette remains visible on smaller screens.
+
 ## 1.5.1 — Bun install and TypeScript peer compatibility
 
 - Downgraded TypeScript from 7.0.2 to 6.0.3 to fit the supported typescript-eslint 8.71.1 range (>=4.8.4 <6.1.0).
