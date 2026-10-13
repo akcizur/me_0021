@@ -1,0 +1,66 @@
+name: Verify and deploy Cinematic Edge Motion
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: cinematic-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          if [[ -f package-lock.json ]]; then
+            npm ci --no-audit --no-fund
+          else
+            echo "::warning::package-lock.json is not committed. Bootstrapping it for this run; download the package-lock-bootstrap artifact and commit the lockfile for deterministic CI."
+            npm install --no-audit --no-fund
+            echo "BOOTSTRAPPED_LOCKFILE=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Validate source, lint, typecheck and production build
+        run: npm run verify
+
+      - name: Upload bootstrapped dependency lockfile
+        if: env.BOOTSTRAPPED_LOCKFILE == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-lock-bootstrap
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/deploy-pages@v4

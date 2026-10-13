@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "title": "Cinematic Edge Motion · Living Grain",
+    "contentVersion": "1.5.0"
+  },
+  "nav": {
+    "ariaLabel": "Main navigation",
+    "brand": "RUZICKAJAKUB",
+    "links": {
+      "landing": "LANDING",
+      "gradient": "GRADIENT",
+      "fade": "FADE"
+    }
+  },
+  "hero": {
+    "eyebrow": "Cinematic edge motion · living canvas grain",
+    "title": {
+      "line1": "BLUR",
+      "line2": "AT THE",
+      "line3": "EDGE."
+    },
+    "description": "A cinematic study of mirrored glass edges, smooth Lenis scrolling, velocity-aware light, layered parallax and living 35mm film grain."
+  },
+  "sections": {
+    "blur": {
+      "number": "01",
+      "title": "BLUR",
+      "description": "The fixed edge layers remain visually transparent while adapting their blur and glow to page movement, with a fluid response that keeps the scene alive."
+    },
+    "gradient": {
+      "number": "02",
+      "title": "GRADIENT",
+      "description": "The gradient is strongest at each viewport boundary and softly dissolves toward the content, mirrored from top to bottom. Grain subtly weaves with gate weave."
+    },
+    "fade": {
+      "number": "03",
+      "title": "FADE",
+      "description": "The masks dissolve the glass progressively, avoiding hard panel edges while parallax keeps the depth alive. Fine canvas grain adds a restrained cinematic texture."
+    }
+  },
+  "card": {
+    "label": "Effect stack",
+    "value": "inertia → velocity → parallax → glass edge → living grain"
+  },
+  "footer": {
+    "primary": "CINEMATIC MOTION · LENIS SCROLL / GSAP SCENES / EDGE GLASS",
+    "secondary": "LOCAL RUNTIME · TYPE-SAFE CONTENT · REDUCED MOTION · PRODUCTION BUILD"
+  }
+}

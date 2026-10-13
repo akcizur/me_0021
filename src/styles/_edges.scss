@@ -1,0 +1,211 @@
+.edge {
+  position: fixed;
+  inset-inline: 0;
+  height: var(--edge-size);
+  z-index: 90;
+  pointer-events: none;
+  overflow: visible;
+  isolation: isolate;
+
+  &--top {
+    top: 0;
+    --edge-energy: var(--edge-energy-top);
+  }
+
+  &--bottom {
+    bottom: 0;
+    --edge-energy: var(--edge-energy-bottom);
+  }
+
+  // Main glass pass. The mask deliberately reaches full transparency at the
+  // inward edge so the blur cannot finish as a visible horizontal strip.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -54px -5%;
+    background: rgba(5, 5, 5, .012);
+    backdrop-filter: blur(calc(var(--edge-blur-main) + var(--edge-energy) * 46px)) saturate(calc(1.06 + var(--edge-energy) * .14));
+    -webkit-backdrop-filter: blur(calc(var(--edge-blur-main) + var(--edge-energy) * 46px)) saturate(calc(1.06 + var(--edge-energy) * .14));
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      rgba(0, 0, 0, .99) 9%,
+      rgba(0, 0, 0, .94) 22%,
+      rgba(0, 0, 0, .79) 39%,
+      rgba(0, 0, 0, .55) 56%,
+      rgba(0, 0, 0, .30) 72%,
+      rgba(0, 0, 0, .12) 86%,
+      rgba(0, 0, 0, .035) 95%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      rgba(0, 0, 0, .99) 9%,
+      rgba(0, 0, 0, .94) 22%,
+      rgba(0, 0, 0, .79) 39%,
+      rgba(0, 0, 0, .55) 56%,
+      rgba(0, 0, 0, .30) 72%,
+      rgba(0, 0, 0, .12) 86%,
+      rgba(0, 0, 0, .035) 95%,
+      transparent 100%
+    );
+    transform: translate3d(0, var(--edge-drift, 0px), 0);
+    will-change: transform;
+  }
+
+  &--bottom::before {
+    mask-image: linear-gradient(
+      to top,
+      #000 0%,
+      rgba(0, 0, 0, .99) 9%,
+      rgba(0, 0, 0, .94) 22%,
+      rgba(0, 0, 0, .79) 39%,
+      rgba(0, 0, 0, .55) 56%,
+      rgba(0, 0, 0, .30) 72%,
+      rgba(0, 0, 0, .12) 86%,
+      rgba(0, 0, 0, .035) 95%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to top,
+      #000 0%,
+      rgba(0, 0, 0, .99) 9%,
+      rgba(0, 0, 0, .94) 22%,
+      rgba(0, 0, 0, .79) 39%,
+      rgba(0, 0, 0, .55) 56%,
+      rgba(0, 0, 0, .30) 72%,
+      rgba(0, 0, 0, .12) 86%,
+      rgba(0, 0, 0, .035) 95%,
+      transparent 100%
+    );
+  }
+
+  // Secondary diffusion pass adds body to the glass without creating a panel edge.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -38px -4%;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, .025), transparent 13%, transparent 87%, rgba(255, 255, 255, .025)),
+      linear-gradient(to bottom, rgba(0, 0, 0, .28), rgba(0, 0, 0, .17) 24%, rgba(0, 0, 0, .075) 49%, rgba(0, 0, 0, .025) 73%, transparent 100%);
+    backdrop-filter: blur(calc(var(--edge-blur-diffusion) + var(--edge-energy) * 24px)) saturate(1.08);
+    -webkit-backdrop-filter: blur(calc(var(--edge-blur-diffusion) + var(--edge-energy) * 24px)) saturate(1.08);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
+    opacity: calc(.48 + var(--edge-energy) * .12);
+  }
+
+  &--bottom::after {
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, .025), transparent 13%, transparent 87%, rgba(255, 255, 255, .025)),
+      linear-gradient(to top, rgba(0, 0, 0, .32), rgba(0, 0, 0, .19) 24%, rgba(0, 0, 0, .085) 49%, rgba(0, 0, 0, .025) 73%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 14%, rgba(0, 0, 0, .78) 34%, rgba(0, 0, 0, .48) 56%, rgba(0, 0, 0, .19) 78%, rgba(0, 0, 0, .045) 93%, transparent 100%);
+  }
+
+  &__haze,
+  &__mist,
+  &__glow,
+  &__shine {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  // Wide soft haze is layered behind the sharper diffusion pass.
+  &__haze {
+    inset: -12% -5%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .052), rgba(255, 255, 255, .026) 28%, rgba(255, 255, 255, .009) 60%, transparent 100%);
+    filter: blur(54px);
+    opacity: calc(.36 + var(--edge-energy) * .14);
+  }
+
+  &--bottom &__haze {
+    background: linear-gradient(to top, rgba(255, 255, 255, .052), rgba(255, 255, 255, .026) 28%, rgba(255, 255, 255, .009) 60%, transparent 100%);
+  }
+
+  &__mist {
+    inset: -16% -7%;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .085) 0%, rgba(255, 255, 255, .038) 24%, rgba(255, 255, 255, .012) 47%, transparent 72%),
+      linear-gradient(to bottom, rgba(255, 255, 255, .025), rgba(255, 255, 255, .009) 48%, transparent 100%);
+    filter: blur(38px);
+    opacity: calc(.30 + var(--edge-energy) * .16);
+    transform: translate3d(0, var(--mist-drift, 0px), 0);
+  }
+
+  &--bottom &__mist {
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, .085) 0%, rgba(255, 255, 255, .038) 24%, rgba(255, 255, 255, .012) 47%, transparent 72%),
+      linear-gradient(to top, rgba(255, 255, 255, .025), rgba(255, 255, 255, .009) 48%, transparent 100%);
+  }
+
+  // Larger luminous bloom, itself masked toward the center of the page.
+  &__glow {
+    width: min(84vw, 1180px);
+    height: min(52vw, 680px);
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, .17) 0%,
+      rgba(255, 255, 255, .085) 22%,
+      rgba(255, 255, 255, .038) 43%,
+      rgba(255, 255, 255, .012) 61%,
+      transparent 78%
+    );
+    filter: blur(86px) saturate(1.18);
+    opacity: calc(.30 + var(--edge-energy) * .34);
+  }
+
+  &--top &__glow {
+    top: -25%;
+    left: 8%;
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .82) 43%, rgba(0, 0, 0, .32) 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .82) 43%, rgba(0, 0, 0, .32) 72%, transparent 100%);
+  }
+
+  &--bottom &__glow {
+    right: 8%;
+    bottom: -25%;
+    mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .82) 43%, rgba(0, 0, 0, .32) 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .82) 43%, rgba(0, 0, 0, .32) 72%, transparent 100%);
+  }
+
+  &__shine {
+    left: 7%;
+    right: 7%;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .05) 18%, rgba(255, 255, 255, .13) 50%, rgba(255, 255, 255, .05) 82%, transparent 100%);
+    filter: blur(1.8px);
+    opacity: calc(.16 + var(--edge-energy) * .22);
+    mask-image: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  }
+
+  &--top &__shine { bottom: 12%; }
+  &--bottom &__shine { top: 12%; }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .edge::before,
+  .edge::after {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5), rgba(0, 0, 0, .25) 45%, transparent 100%);
+  }
+
+  .edge--bottom::before,
+  .edge--bottom::after {
+    background: linear-gradient(to top, rgba(0, 0, 0, .5), rgba(0, 0, 0, .25) 45%, transparent 100%);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .edge::before,
+  .edge::after {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .edge__glow { opacity: .2; }
+}

@@ -1,0 +1,179 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: auto;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--fg);
+  background: var(--bg);
+  overscroll-behavior-x: none;
+}
+
+body,
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.72);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.page-shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 74% 12%, rgba(255,255,255,.075), transparent 30%),
+    radial-gradient(circle at 17% 68%, rgba(255,255,255,.052), transparent 27%),
+    var(--bg);
+}
+
+.ambient-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 48% 50%, rgba(255,255,255,.018), transparent 58%);
+}
+
+.atmosphere-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: .52;
+  mix-blend-mode: screen;
+  transform: translateZ(0);
+  contain: strict;
+  filter: blur(.15px);
+}
+
+.film-grain {
+  position: fixed;
+  inset: -50px;
+  z-index: 4;
+  width: calc(100% + 100px);
+  height: calc(100% + 100px);
+  pointer-events: none;
+  opacity: .055;
+  mix-blend-mode: soft-light;
+  will-change: transform;
+  contain: strict;
+}
+
+main,
+.nav,
+.footer {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* Lenis + ScrollTrigger share a single animation clock. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Keyboard users can jump over the persistent navigation and atmospheric layers. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 500;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 4px;
+  color: #fff;
+  background: #101010;
+  font-size: 13px;
+  transform: translateY(calc(-100% - 18px));
+  transition: transform .2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  visibility: hidden;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, .09), transparent 58%),
+    linear-gradient(150deg, #0b0b0b 0%, #020202 62%, #111 100%);
+  will-change: transform;
+}
+
+.page-transition::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 7%;
+  right: 7%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3), transparent);
+  box-shadow: 0 0 28px rgba(255, 255, 255, .18);
+  opacity: .7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+  .page-transition { display: none !important; }
+}

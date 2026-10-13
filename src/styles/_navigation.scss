@@ -1,0 +1,94 @@
+@use './tokens' as *;
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--nav-height);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.nav-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.brand {
+  position: relative;
+  z-index: 130;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    opacity: .68;
+    transition: opacity .2s ease, transform .2s ease;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.nav-menu-toggle {
+  display: none;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 4px;
+  color: #f4f4f4;
+  background: rgba(10,10,10,.35);
+  appearance: none;
+  cursor: pointer;
+  z-index: 130;
+  transition: border-color .22s ease, background-color .22s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(255,255,255,.6);
+    background: rgba(255,255,255,.06);
+  }
+
+  .menu-line {
+    display: block;
+    width: 17px;
+    height: 1px;
+    flex: 0 0 1px;
+    background: currentColor;
+    transform-origin: center;
+    // Fixed release regression: $ease-cinematic is defined in _tokens.scss and imported above.
+    transition: transform .24s $ease-cinematic, opacity .18s ease;
+  }
+
+  &.is-open .menu-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  &.is-open .menu-line:nth-child(2) { opacity: 0; transform: scaleX(.3); }
+  &.is-open .menu-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+}

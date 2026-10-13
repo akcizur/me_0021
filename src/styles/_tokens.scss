@@ -1,0 +1,62 @@
+$breakpoint-mobile: 760px;
+$breakpoint-compact: 380px;
+$breakpoint-short-height: 700px;
+$ease-cinematic: cubic-bezier(0.2, 0.75, 0.25, 1);
+$ease-title: cubic-bezier(0.22, 0.8, 0.2, 1);
+$ease-page-wipe: cubic-bezier(0.76, 0, 0.24, 1);
+$layout-max: 1180px;
+$font-stack: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+:root {
+  color-scheme: dark;
+  color: #fff;
+  background: #050505;
+  font-family: #{$font-stack};
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // Fluid type scale; all page typography references these shared tokens.
+  --type-micro: clamp(0.625rem, 0.58rem + 0.12vw, 0.75rem);
+  --type-eyebrow: clamp(0.625rem, 0.56rem + 0.16vw, 0.75rem);
+  --type-body: clamp(1rem, 0.94rem + 0.28vw, 1.1875rem);
+  --type-body-small: clamp(0.9375rem, 0.9rem + 0.18vw, 1.0625rem);
+  --type-card: clamp(1.0625rem, 0.96rem + 0.38vw, 1.375rem);
+  --type-footer: clamp(0.625rem, 0.6rem + 0.14vw, 0.75rem);
+  --type-section: clamp(2.625rem, 1.7rem + 4.4vw, 6rem);
+  --type-hero: clamp(3.25rem, 1.2rem + 8.2vw, 9.5rem);
+  --leading-tight: 0.88;
+  --leading-copy: 1.72;
+  --tracking-wide: 0.18em;
+  --measure-copy: 62ch;
+
+  // Spacing and layout tokens.
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-gutter: clamp(1rem, 4vw, 3.5rem);
+  --content-width: #{$layout-max};
+
+  // Surface, edge and motion system.
+  --bg: #050505;
+  --fg: #fff;
+  --muted: #9a9a9a;
+  --line: rgba(255, 255, 255, 0.13);
+  --surface-glass: rgba(255, 255, 255, 0.045);
+  --surface-glass-border: rgba(255, 255, 255, 0.12);
+  --nav-height: 72px;
+  --edge-size: clamp(220px, 28vw, 420px);
+  --edge-blur-main: 92px;
+  --edge-blur-diffusion: 48px;
+  --edge-energy: 0;
+  --edge-energy-top: 0;
+  --edge-energy-bottom: 0;
+  --scroll-position: 0;
+  --shadow-3d: -1px -1px 1px rgba(255,255,255,.55), 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 2px 20px 5px rgba(0,0,0,.9), 5px 23px 5px rgba(0,0,0,.3), 8px 27px 8px rgba(0,0,0,.5), 8px 28px 35px rgba(0,0,0,.9);
+}
