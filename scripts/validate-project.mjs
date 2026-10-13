@@ -58,7 +58,7 @@ if (packageJson) {
   for (const script of ['dev', 'lint', 'lint:fix', 'typecheck', 'validate:project', 'build', 'preview', 'verify', 'bun:untrusted', 'verify:windows', 'lockfile:generate']) {
     if (!packageJson.scripts?.[script]) fail(`Missing package script: ${script}`);
   }
-  if (!packageJson.engines?.node?.includes('22.13.0')) fail('Node engine must require Node 22.13 or newer in the 22.x line.');
+  if (packageJson.engines?.node !== '24.x') fail('Node engine must pin Vercel and CI to Node.js 24.x.');
   for (const name of ['react', 'react-dom', 'gsap', '@gsap/react', 'lenis']) {
     if (!packageJson.dependencies?.[name]) fail(`${name} must be a runtime dependency.`);
   }
@@ -99,7 +99,17 @@ if (!existsSync(bunLockPath)) {
 }
 
 const workflowSource = readFileSync(join(root, '.github/workflows/deploy.yml'), 'utf8');
-for (const feature of ['oven-sh/setup-bun@v2', 'bun install --frozen-lockfile', 'bun run verify', 'actions/deploy-pages@v4']) {
+for (const feature of [
+  'actions/checkout@v7',
+  'actions/setup-node@v7',
+  'node-version: 24',
+  'oven-sh/setup-bun@v2',
+  'bun install --frozen-lockfile',
+  'bun run verify',
+  'actions/configure-pages@v6',
+  'actions/upload-pages-artifact@v5',
+  'actions/deploy-pages@v5.0.1',
+]) {
   if (!workflowSource.includes(feature)) fail(`GitHub Actions workflow must contain ${feature}.`);
 }
 
