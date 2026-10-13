@@ -7,7 +7,7 @@ A cinematic landing page with fluid design tokens, 3D title choreography, pinned
 ## Requirements
 
 - Bun 1.4.3
-- Node.js 22.13+ (or 24+)
+- Node.js 24.x (the pinned Vercel and CI runtime)
 
 ## Install and run on Windows / PowerShell
 
@@ -53,7 +53,7 @@ The PowerShell helper runs installation diagnostics and all quality checks in on
 - src/motion/gsapPrimitives.ts contains reusable scrub-scene and curtain-transition helpers.
 - src/hooks/useGsapAnimations.ts uses @gsap/react and gsap.matchMedia() for scoped cleanup, 3D titles, pinned chapters and ScrollTrigger scenes.
 - src/hooks/useLenisScroll.ts advances Lenis from the GSAP ticker and keeps ScrollTrigger synchronized.
-- src/hooks/useCinematicMotion.ts supplies scroll-reactive edge light, a progress indicator and lightweight parallax without intercepting wheel or keyboard events.
+- src/hooks/useCinematicMotion.ts supplies scroll-reactive edge light, chromatic edge offsets, motion-responsive film grain, a progress indicator and lightweight parallax without intercepting wheel or keyboard events.
 - src/hooks/usePageTransitions.ts coordinates in-page curtain transitions and focus transfer.
 - Lenis is disabled when prefers-reduced-motion: reduce is active; native scrolling remains available.
 
