@@ -49,8 +49,13 @@ for (const file of requiredFiles) {
 }
 
 if (packageJson) {
-  for (const script of ['dev', 'lint', 'lint:fix', 'typecheck', 'validate:project', 'build', 'preview', 'verify']) {
-    if (!packageJson.scripts?.[script]) fail(`Missing npm script: ${script}`);
+  if (packageJson.packageManager !== 'bun@1.4.3') fail('packageManager must pin Bun to 1.4.3.');
+  const typescriptVersion = packageJson.devDependencies?.typescript;
+  if (typescriptVersion !== '6.0.3') {
+    fail('TypeScript 6.0.3 must remain pinned: typescript-eslint 8.71.1 supports TypeScript >=4.8.4 and <6.1.0.');
+  }
+  for (const script of ['dev', 'lint', 'lint:fix', 'typecheck', 'validate:project', 'build', 'preview', 'verify', 'bun:untrusted', 'verify:windows', 'lockfile:generate']) {
+    if (!packageJson.scripts?.[script]) fail(`Missing package script: ${script}`);
   }
   if (!packageJson.engines?.node?.includes('22.13.0')) fail('Node engine must require Node 22.13 or newer in the 22.x line.');
   for (const name of ['react', 'react-dom', 'gsap', '@gsap/react', 'lenis']) {
@@ -79,6 +84,22 @@ if (content) {
 }
 if (manifest && (!manifest.name || !manifest.theme_color || !Array.isArray(manifest.icons))) {
   fail('site.webmanifest must provide name, theme_color and local icons.');
+}
+
+const bunLockPath = join(root, 'bun.lock');
+if (!existsSync(bunLockPath)) {
+  fail('bun.lock must be committed for reproducible Bun installs.');
+} else {
+  const bunLock = readFileSync(bunLockPath, 'utf8');
+  if (!bunLock.includes('"typescript@6.0.3"') && !bunLock.includes('typescript@6.0.3')) {
+    fail('bun.lock does not resolve TypeScript 6.0.3.');
+  }
+  if (bunLock.includes('typescript@7.0.2')) fail('bun.lock still contains the unsupported TypeScript 7.0.2 package.');
+}
+
+const workflowSource = readFileSync(join(root, '.github/workflows/deploy.yml'), 'utf8');
+for (const feature of ['oven-sh/setup-bun@v2', 'bun install --frozen-lockfile', 'bun run verify', 'actions/deploy-pages@v4']) {
+  if (!workflowSource.includes(feature)) fail(`GitHub Actions workflow must contain ${feature}.`);
 }
 
 const sourceRoot = join(root, 'src');
@@ -174,7 +195,7 @@ for (const file of runtimeSources) {
   }
 }
 
-if (!existsSync(join(root, 'package-lock.json'))) notes.push('package-lock.json is not generated in this archive; run npm install, commit the generated lockfile, and use npm ci for reproducible installs.');
+if (!existsSync(join(root, 'bun.lock'))) fail('bun.lock is required and must be committed for reproducible installs.');
 
 if (failures.length) {
   console.error('Project validation failed:');
