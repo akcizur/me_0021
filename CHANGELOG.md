@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.1 — Bun install and TypeScript peer compatibility
+
+- Downgraded TypeScript from 7.0.2 to 6.0.3 to fit the supported typescript-eslint 8.71.1 range (>=4.8.4 <6.1.0).
+- Updated bun.lock and removed TypeScript 7 platform-specific optional packages.
+- Pinned packageManager to Bun 1.4.3 and made build/verify scripts use Bun consistently.
+- Switched GitHub Actions to install Bun and run bun install --frozen-lockfile.
+- Added a Windows PowerShell verification script and an explicit untrusted lifecycle-script diagnostic.
+- Extended validation to prevent unsupported TypeScript versions and stale lockfile metadata from reappearing.
+
 ## 1.5.0 — Production toolkit, smooth scrolling and transitions
 
 - Added shared fluid design tokens for typography, spacing, colors, surfaces, breakpoints and motion.
@@ -17,3 +26,4 @@
 - Added staggered title lines, chapter-specific arrival/hold/release motion and a scroll cue.
 - Paused the orbital outro when it leaves the viewport.
 - Expanded edge fade, haze and glow with regression validation.
+

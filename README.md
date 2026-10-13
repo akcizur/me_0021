@@ -1,100 +1,107 @@
 # Cinematic Edge Motion · Living Grain
 
-**Release 1.5.0** · React 19 · TypeScript 7 · Vite 8 · SCSS · GSAP · Lenis
+**Release 1.5.1** · React 19 · TypeScript 6.0.3 · Vite 8 · SCSS · GSAP · Lenis · Bun 1.4.3
 
-A standalone cinematic landing page with fluid design tokens, 3D title choreography, pinned ScrollTrigger chapters, Lenis smooth scrolling, atmospheric canvases, film grain, mirrored glass-edge blur, in-page curtain transitions and responsive navigation. Runtime styling and JavaScript are bundled locally; the page does not depend on a third-party CDN.
+A cinematic landing page with fluid design tokens, 3D title choreography, pinned ScrollTrigger chapters, Lenis smooth scrolling, atmospheric canvases, film grain, mirrored glass-edge blur, in-page curtain transitions and responsive navigation. Runtime CSS and JavaScript are bundled locally; no third-party CDN is required.
 
 ## Requirements
 
-- Node.js `22.13+` (or `24+`)
-- npm `10+`
+- Bun 1.4.3
+- Node.js 22.13+ (or 24+)
 
-## Install and run
+## Install and run on Windows / PowerShell
 
-```bash
-npm install
-npm run dev
-```
+    bun install --frozen-lockfile
+    bun run dev
 
-## Quality gates and production build
+Open the local URL printed by Vite.
 
-```bash
-npm run validate:project
-npm run lint
-npm run typecheck
-npm run build
-npm run preview
-```
+## Quality checks and production build
 
-Or run the entire sequence:
+    bun run validate:project
+    bun run lint
+    bun run typecheck
+    bun run build
+    bun run preview
 
-```bash
-npm run verify
-```
+Or run the complete quality gate:
 
-`npm run build` validates local source, contents, SCSS tokens/imports and motion integrations, runs ESLint and strict TypeScript, then produces a minified Vite release in `dist/`.
+    bun run verify
 
-## Dependency lockfile
+The build verifies local project contracts, runs ESLint with zero warnings, performs strict TypeScript checking, compiles SCSS and generates the production site in dist/.
 
-The release does not fabricate an incomplete npm lockfile. Run `npm install` from a machine with npm registry access and commit the generated `package-lock.json`. GitHub Actions uses `npm ci` whenever the lockfile is committed. For a first run without a lockfile, the workflow temporarily resolves dependencies and uploads a `package-lock-bootstrap` artifact retained for 7 days; download and commit it so later CI runs are reproducible.
+## TypeScript compatibility fix
 
-```bash
-npm run lockfile:generate
-```
+This release pins TypeScript to 6.0.3. typescript-eslint 8.71.1 supports TypeScript versions >=4.8.4 and <6.1.0; TypeScript 7.0.2 was outside that range and caused the peer-dependency warnings shown by Bun.
+
+The checked-in bun.lock is updated to match the package manifest and removes TypeScript 7's platform-specific optional packages. Use bun install --frozen-lockfile for a reproducible install. When deliberately updating a dependency, run bun install and commit both package.json and bun.lock.
+
+## If Bun reports a blocked postinstall
+
+The project trusts only @parcel/watcher, which is needed by the Sass watcher. The install should not broadly trust every dependency. To identify any remaining blocked lifecycle script, run:
+
+    bun run bun:untrusted
+
+Review the reported package and its lifecycle script first. Only if it is trusted and required, approve that specific package with bun pm trust <package-name>, then rerun bun install and bun run verify. Do not use bun pm trust --all as a generic fix.
+
+The PowerShell helper runs installation diagnostics and all quality checks in one command:
+
+    bun run verify:windows
 
 ## Motion system
 
-- `src/motion/gsapPrimitives.ts` contains reusable scrub-scene and curtain-transition helpers.
-- `src/hooks/useGsapAnimations.ts` uses `@gsap/react` and `gsap.matchMedia()` for scoped cleanup, 3D titles, pinned chapters and ScrollTrigger scenes.
-- `src/hooks/useLenisScroll.ts` advances Lenis from the GSAP ticker and keeps ScrollTrigger synchronized.
-- `src/hooks/useCinematicMotion.ts` supplies scroll-reactive edge light, a progress indicator and lightweight parallax; it does not intercept wheel or keyboard input.
-- `src/hooks/usePageTransitions.ts` coordinates anchor navigation with a reversible GSAP curtain wipe and focus transfer.
-- Lenis is disabled when `prefers-reduced-motion: reduce` is active; native scrolling remains available.
+- src/motion/gsapPrimitives.ts contains reusable scrub-scene and curtain-transition helpers.
+- src/hooks/useGsapAnimations.ts uses @gsap/react and gsap.matchMedia() for scoped cleanup, 3D titles, pinned chapters and ScrollTrigger scenes.
+- src/hooks/useLenisScroll.ts advances Lenis from the GSAP ticker and keeps ScrollTrigger synchronized.
+- src/hooks/useCinematicMotion.ts supplies scroll-reactive edge light, a progress indicator and lightweight parallax without intercepting wheel or keyboard events.
+- src/hooks/usePageTransitions.ts coordinates in-page curtain transitions and focus transfer.
+- Lenis is disabled when prefers-reduced-motion: reduce is active; native scrolling remains available.
 
 ## Design and accessibility
 
-`src/styles/_tokens.scss` defines the shared fluid type scale, spacing system, colors, surfaces, breakpoints and elevation tokens. The SCSS partials split base styles, edges, navigation, page content and responsive rules.
+src/styles/_tokens.scss defines fluid typography, spacing, colors, surfaces, breakpoints and elevation tokens. The SCSS partials split base styles, edge glass, navigation, page content and responsive rules.
 
-The mobile navigation supports `aria-expanded`, hidden/inert closed links, focus behavior, Escape and viewport changes. A visible-on-focus skip link, clear keyboard focus and reduced-motion styles are included.
+The mobile navigation supports aria-expanded, aria-hidden, inert, Escape handling and viewport reset. A skip link, visible keyboard focus and reduced-motion styles are included.
 
 ## SEO and performance
 
-`index.html` includes description, Open Graph, Twitter, robots, theme and referrer metadata. The public directory includes a local SVG favicon, PWA manifest and `robots.txt`. No canonical URL or social share image is invented because this project does not have a known production domain/image. Vite emits minified output without production sourcemaps.
+index.html includes description, Open Graph, Twitter, robots, theme and referrer metadata. The public directory includes a local SVG favicon, web manifest and robots.txt. No canonical URL or social-share image is invented without a known production domain and image. Vite emits minified output without production sourcemaps.
 
-## GitHub Pages
+## GitHub Actions and GitHub Pages
 
-The workflow in `.github/workflows/deploy.yml` runs on pushes, pull requests and manual dispatch. Every run installs dependencies, validates sources, lints, type-checks and builds. Pull requests do not deploy; successful push/workflow runs upload `dist/` and deploy through GitHub Pages.
+.github/workflows/deploy.yml installs the exact dependency graph using bun install --frozen-lockfile, runs diagnostics and bun run verify on pull requests, then publishes dist/ only from successful pushes/manual runs on main or master.
 
-Push to `main` or `master`, then select **GitHub Actions** in repository **Settings → Pages**.
+For deployment, select GitHub Actions under repository Settings → Pages.
 
 ## Structure
 
-```text
-src/
-  components/App.tsx
-  data/content.json
-  data/content.ts
-  hooks/useCinematicMotion.ts
-  hooks/useGsapAnimations.ts
-  hooks/useLenisScroll.ts
-  hooks/usePageTransitions.ts
-  motion/gsapPrimitives.ts
-  styles/main.scss
-  styles/_tokens.scss
-  styles/_base.scss
-  styles/_edges.scss
-  styles/_navigation.scss
-  styles/_content.scss
-  styles/_responsive.scss
-public/
-  favicon.svg
-  site.webmanifest
-  robots.txt
-scripts/validate-project.mjs
-eslint.config.js
-.github/workflows/deploy.yml
-index.html
-vite.config.ts
-tsconfig.json
-package.json
-package-lock.json (generate via npm install and commit)
+    src/
+      components/App.tsx
+      data/content.json
+      data/content.ts
+      hooks/useCinematicMotion.ts
+      hooks/useGsapAnimations.ts
+      hooks/useLenisScroll.ts
+      hooks/usePageTransitions.ts
+      motion/gsapPrimitives.ts
+      styles/main.scss
+      styles/_tokens.scss
+      styles/_base.scss
+      styles/_edges.scss
+      styles/_navigation.scss
+      styles/_content.scss
+      styles/_responsive.scss
+    public/
+      favicon.svg
+      site.webmanifest
+      robots.txt
+    scripts/
+      validate-project.mjs
+      verify-windows.ps1
+    eslint.config.js
+    .github/workflows/deploy.yml
+    index.html
+    vite.config.ts
+    tsconfig.json
+    package.json
+    bun.lock
