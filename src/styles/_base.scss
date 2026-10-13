@@ -95,7 +95,7 @@ a:focus-visible {
   width: calc(100% + 100px);
   height: calc(100% + 100px);
   pointer-events: none;
-  opacity: .055;
+  opacity: calc(.055 + var(--grain-energy, 0) * .025);
   mix-blend-mode: soft-light;
   will-change: transform;
   contain: strict;
