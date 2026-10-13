@@ -1,6 +1,6 @@
 # Cinematic Edge Motion · Living Grain
 
-**Release 1.5.1** · React 19 · TypeScript 6.0.3 · Vite 8 · SCSS · GSAP · Lenis · Bun 1.4.3
+**Release 1.5.2** · React 19 · TypeScript 6.0.3 · Vite 8 · SCSS · GSAP · Lenis · Bun 1.4.3
 
 A cinematic landing page with fluid design tokens, 3D title choreography, pinned ScrollTrigger chapters, Lenis smooth scrolling, atmospheric canvases, film grain, mirrored glass-edge blur, in-page curtain transitions and responsive navigation. Runtime CSS and JavaScript are bundled locally; no third-party CDN is required.
 

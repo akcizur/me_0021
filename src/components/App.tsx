@@ -273,7 +273,7 @@ function EdgeLayers() {
   return (
     <>
       <div className="edge edge--top" aria-hidden="true">
-        <div className="edge__haze" /><div className="edge__glow" /><div className="edge__shine" /><div className="edge__mist" />
+        <div className="edge__drop-shadow" /><div className="edge__haze" /><div className="edge__glow" /><div className="edge__shine" /><div className="edge__mist" />
       </div>
       <div className="edge edge--bottom" aria-hidden="true">
         <div className="edge__drop-shadow" /><div className="edge__haze" /><div className="edge__glow" /><div className="edge__shine" /><div className="edge__mist" />
