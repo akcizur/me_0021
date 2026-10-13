@@ -14,11 +14,12 @@
     "lint:fix": "eslint src scripts vite.config.ts eslint.config.js --fix",
     "typecheck": "tsc --noEmit",
     "validate:project": "node scripts/validate-project.mjs",
-    "build": "npm run validate:project && npm run lint && npm run typecheck && vite build",
+    "build": "bun run validate:project && bun run lint && bun run typecheck && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "verify": "npm run build",
+    "verify": "bun run build",
     "bun:untrusted": "bun pm untrusted",
-    "verify:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-windows.ps1"
+    "verify:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-windows.ps1",
+    "lockfile:generate": "bun install"
   },
   "dependencies": {
     "@gsap/react": "2.1.2",
