@@ -28,28 +28,19 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        shell: bash
-        run: |
-          if [[ -f package-lock.json ]]; then
-            npm ci --no-audit --no-fund
-          else
-            echo "::warning::package-lock.json is not committed. Bootstrapping it for this run; download the package-lock-bootstrap artifact and commit the lockfile for deterministic CI."
-            npm install --no-audit --no-fund
-            echo "BOOTSTRAPPED_LOCKFILE=true" >> "$GITHUB_ENV"
-          fi
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+
+      - name: Install exact dependencies from bun.lock
+        run: bun install --frozen-lockfile
+
+      - name: Diagnose blocked dependency lifecycle scripts
+        run: bun pm untrusted
 
       - name: Validate source, lint, typecheck and production build
-        run: npm run verify
-
-      - name: Upload bootstrapped dependency lockfile
-        if: env.BOOTSTRAPPED_LOCKFILE == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: package-lock-bootstrap
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 7
+        run: bun run verify
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
