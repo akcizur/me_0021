@@ -42,6 +42,7 @@ const requiredFiles = [
   'public/favicon.svg',
   'public/site.webmanifest',
   'public/robots.txt',
+  'scripts/verify-windows.ps1',
   '.github/workflows/deploy.yml',
 ];
 for (const file of requiredFiles) {
